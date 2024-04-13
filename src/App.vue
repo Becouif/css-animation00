@@ -3,10 +3,22 @@
     <div class="block" :class="{animate: animateBlock}"></div>
     <button @click="animateBtn">Animate</button>
   </div>
-  <base-modal @close="hideDialog" v-if="dialogIsVisible">
-    <p>This is a test dialog!</p>
-    <button @click="hideDialog">Close it!</button>
-  </base-modal>
+  <!-- we wanna toggle this paragraph and animate the visiblity  -->
+  <!-- * we use v-if to check if a boolean value  -->
+  <!-- then change the boolean value in the function trigger by the button toggle  -->
+  <div class="container">
+    <transition>
+      <p v-if="toggleParagraph">This is only a paragraph that may be visible or not!!!</p>
+    </transition>
+    <button @click="toggleParagraphBtn">Toggle Paragraph</button>
+  </div>
+  <!-- using transition to handle this base modal  -->
+
+    <base-modal @close="hideDialog" v-if="dialogIsVisible">
+      <p>This is a test dialog!</p>
+      <button @click="hideDialog">Close it!</button>
+    </base-modal>
+
   <div class="container">
     <button @click="showDialog">Show Dialog</button>
   </div>
@@ -18,7 +30,7 @@ export default {
     return { 
       dialogIsVisible: false,
       animateBlock:false,
-    
+      toggleParagraph: false,
     };
 
   },
@@ -32,6 +44,9 @@ export default {
     animateBtn(){
       this.animateBlock = !this.animateBlock;
     },
+    toggleParagraphBtn(){
+      this.toggleParagraph = !this.toggleParagraph;
+    }
 
   },
 };
@@ -86,13 +101,13 @@ button:active {
 .animate {
   /* transform: translateX(-50px); */
 
-  animation: slide-fade 0.3s ease-out forwards;
+  animation: slide-scale 0.3s ease-out forwards;
 }
 
 /* we use animation key for @keyframes  */
 /* CSS animation  */
 /* we use @keyframes then the name i want  */
-@keyframes slide-fade {
+@keyframes slide-scale {
   0% {
     transform: translateX(0) scale(1);
   }
@@ -105,4 +120,38 @@ button:active {
     transform: translateX(-150px) scale(1);
   }
 }
+
+/* transition css  */
+/* this is the default name that came with transition  */
+.v-enter-from {
+  /* opacity: 0;
+  transform: translateY(-30px); */
+}
+
+.v-enter-active {
+  /* transition: all 0.3s ease-out; */
+  animation: slide-scale 0.3s ease-out;
+}
+
+.v-enter-to {
+  /* opacity: 1; */
+  /* transform: translateY(0); */
+}
+
+.v-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.v-leave-active {
+  /* transition: all 0.3s ease-in; */
+  animation:slide0scale 0.3s ease-out;
+}
+
+.v-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+
 </style>

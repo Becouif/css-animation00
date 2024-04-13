@@ -1,8 +1,10 @@
 <template>
   <div class="backdrop" @click="$emit('close')"></div>
+  <transition name="modal">
   <dialog open>
     <slot></slot>
   </dialog>
+  </transition>
 </template>
 
 <script>
@@ -21,6 +23,7 @@ export default {
   z-index: 10;
   background-color: rgba(0, 0, 0, 0.75);
 }
+/* basically we use our keyframes animation design to animate the dialog*/
 
 dialog {
   position: fixed;
@@ -34,5 +37,31 @@ dialog {
   background-color: white;
   z-index: 100;
   border: none;
+  /* animation: model 0.3s ease-out forwards;s */
+}
+/* fi=or keyframes towork you need to add animation key to the css class you wanna apply it  */
+
+.modal-enter-from {
+
+}
+
+.modal-enter-active {
+  animation: modal 0.3s ease-out;
+}
+
+.modal-enter-to {
+
+}
+
+@keyframes model {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+
+  to {
+    opacity:1;
+    transform: translateY(0) scale(1);
+  }
 }
 </style>
