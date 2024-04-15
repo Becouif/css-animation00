@@ -14,7 +14,9 @@
   </div>
   <!-- using transition to handle this base modal  -->
 
-    <base-modal @close="hideDialog" v-if="dialogIsVisible">
+<!-- we are using a prop name open  -->
+<!-- we are sendin the props to BaseModel -->
+    <base-modal @close="hideDialog" :open="dialogIsVisible">
       <p>This is a test dialog!</p>
       <button @click="hideDialog">Close it!</button>
     </base-modal>
@@ -22,19 +24,46 @@
   <div class="container">
     <button @click="showDialog">Show Dialog</button>
   </div>
+
+  <!-- start of video player test using dialog -->
+    <base-modal @close="hideDialog" :open="videoIsVisible">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/4Ywid2ei6bA?si=kweuOd4wN3df3nEO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      <button @click="hideVideo">Close it!</button>
+    </base-modal>
+
+  <div class="container">
+    <button @click="showVideo">Show Clip</button>
+  </div>
+  <!-- end of showing clip  -->
+  <!-- show this and hide that  -->
+  <div class="container">
+  <transition name="fade-button" mode="out-in">
+    <button @click="showUsers" v-if="usersIsVisible">Show Users</button>
+    <button @click="hideUsers" v-else>Hide Users</button>
+  </transition>
+  </div>
 </template>  
 
 <script>
 export default {
   data() {
     return { 
+      usersIsVisible:false,
+      videoIsVisible: false,
       dialogIsVisible: false,
       animateBlock:false,
       toggleParagraph: false,
+
     };
 
   },
   methods: {
+    showVideo(){
+      this.videoIsVisible = true;
+    },
+    hideVideo(){
+      this.videoIsVisible = false;
+    },
     showDialog() {
       this.dialogIsVisible = true;
     },
@@ -46,6 +75,12 @@ export default {
     },
     toggleParagraphBtn(){
       this.toggleParagraph = !this.toggleParagraph;
+    },
+    showUsers(){
+      this.usersIsVisible = false;
+    },
+    hideUsers(){
+      this.usersIsVisible = true;
     }
 
   },
@@ -153,5 +188,20 @@ button:active {
   transform: translateY(30px);
 }
 
+.fade-button-enter-from,
+.fade-button-leave-to {
+  opacity: 0;
+}
+.fade-button-enter-active {
+  transition: opacity 0.3s ease-out;
+}
+.fade-button-leave-active {
+  transition: opacity 0.3s ease-out;
+}
+
+.fade-button-enter-to,
+.fade-button-leave-from {
+  opacity:1;
+}
 
 </style>

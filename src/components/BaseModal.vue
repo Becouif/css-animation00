@@ -1,7 +1,7 @@
 <template>
-  <div class="backdrop" @click="$emit('close')"></div>
+  <div v-if="open" class="backdrop" @click="$emit('close')"></div>
   <transition name="modal">
-  <dialog open>
+  <dialog open v-if="open">
     <slot></slot>
   </dialog>
   </transition>
@@ -9,6 +9,7 @@
 
 <script>
 export default {
+  props: ['open'],
   emits: ['close'],
 };
 </script>
@@ -41,19 +42,19 @@ dialog {
 }
 /* fi=or keyframes towork you need to add animation key to the css class you wanna apply it  */
 
-.modal-enter-from {
 
-}
 
 .modal-enter-active {
-  animation: modal 0.3s ease-out;
+  animation: modalEnter 0.3s ease-out;
 }
 
-.modal-enter-to {
-
+.modal-leave-active {
+  animation: modalLeave 0.3s ease-in;
 }
 
-@keyframes model {
+
+
+@keyframes modalEnter {
   from {
     opacity: 0;
     transform: translateY(-50px) scale(0.9);
@@ -62,6 +63,17 @@ dialog {
   to {
     opacity:1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes modalLeave {
+  from {
+    opacity:1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
   }
 }
 </style>
