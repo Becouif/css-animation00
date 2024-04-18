@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <user-list></user-list>
+  </div>
+  <div class="container">
     <div class="block" :class="{animate: animateBlock}"></div>
     <button @click="animateBtn">Animate</button>
   </div>
@@ -7,7 +10,7 @@
   <!-- * we use v-if to check if a boolean value  -->
   <!-- then change the boolean value in the function trigger by the button toggle  -->
   <div class="container">
-    <transition>
+    <transition :css="false" @enter="enterPara" @leave="leavePara" @enter-cancelled="enterCancelled" @leave-cancelled="leaveCancelled">
       <p v-if="toggleParagraph">This is only a paragraph that may be visible or not!!!</p>
     </transition>
     <button @click="toggleParagraphBtn">Toggle Paragraph</button>
@@ -42,10 +45,16 @@
     <button @click="hideUsers" v-else>Hide Users</button>
   </transition>
   </div>
+
+
 </template>  
 
 <script>
+import UserList from './components/UserList.vue';
 export default {
+  components: {
+    UserList
+  },
   data() {
     return { 
       usersIsVisible:false,
@@ -53,11 +62,51 @@ export default {
       dialogIsVisible: false,
       animateBlock:false,
       toggleParagraph: false,
+      enterInterval: null,
+      leaveInterval: null,
 
     };
 
   },
   methods: {
+  enterPara(el, done){
+    // we need to call done when we are done with d logic
+    // or else we need after enter will be called immediatly after 
+    console.log(el, "hello");
+    let round = 1;
+    this.enterInterval = setInterval(() => {
+      el.style.opacity = round * 0.01;
+      round++;
+      if (round > 100) {
+        clearInterval(this.enterInterval);
+        // without this done function that is called 
+        // or else vue wont know you are done 
+        done()
+      }
+    }, 20);
+  },
+  leavePara(el, done){
+    console.log("leave");
+    console.log(el);
+
+    let round = 1;
+    // note if you dont change setInterval to arrow function
+    // this.leaveInterval in clearInterval wont work 
+    this.leaveInterval = setInterval( ()=>{
+      el.style.opacity = 1- round * 0.01;
+      round++;
+      if(round > 100){
+        clearInterval(this.leaveInterval);
+        done();
+      }
+    })
+  },
+  enterCancelled(){
+    clearInterval(this.enterInterval);
+  },
+  leaveCancelled(){
+    clearInterval(this.leaveInterval);
+  },
     showVideo(){
       this.videoIsVisible = true;
     },
