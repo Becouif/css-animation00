@@ -1,4 +1,7 @@
 <template>
+  <div>
+<!-- start div  -->
+
   <div class="container">
     <user-list></user-list>
   </div>
@@ -46,6 +49,19 @@
   </transition>
   </div>
 
+<!-- this view router help to display the router components  -->
+<!-- now we can use transition to animate the route  -->
+<!-- but we put inside the router-view and add v-slot to connect the components  -->
+<!-- the mode="" is added to describe mode of transition as usual  -->
+  <div>
+    <router-view v-slot="slotProps">
+      <transition name="route" mode="out-in">
+        <component :is="slotProps.Component"></component>
+      </transition>
+    </router-view>
+  </div>
+  <!-- end div  -->
+</div>
 
 </template>  
 
@@ -252,5 +268,23 @@ button:active {
 .fade-button-leave-from {
   opacity:1;
 }
+
+/* start of css for route transition  */
+.route-enter-from,
+.route-leave-to {
+  opacity: 0;
+}
+.route-enter-active {
+  transition: opacity 0.3s ease-out;
+}
+.route-leave-active {
+  transition: opacity 0.3s ease-out;
+}
+
+.route-enter-to,
+.route-leave-from {
+  opacity:1;
+}
+
 
 </style>

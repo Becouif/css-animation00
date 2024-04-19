@@ -66,9 +66,16 @@ li {
 
 .user-list-leave-active {
   transition: all 1s ease-in;
+  position:absolute;
 }
 .user-list-leave-to {
   opacity: 0;
   transform: translateX(30px);
+}
+
+/* specific class related to transition group  */
+
+.user-list-move {
+  transition: transform 0.8s ease
 }
 </style>
